@@ -260,7 +260,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void startLocationService() {
         // Créer un Intent pour démarrer le service
+        Intent serviceIntent2 = new Intent(this, LocationBackgroundService.class);
+
         Intent serviceIntent = new Intent(this, LocationForegroundService.class);
+        startService(serviceIntent2);
         startService(serviceIntent);
     }
 
