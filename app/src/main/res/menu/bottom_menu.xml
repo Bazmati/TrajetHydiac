@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:layout_width="164dp"
+        android:layout_height="164dp"
+        android:id="@+id/bottom_home"
+        android:title="Home"
+        android:icon="@drawable/baseline_home_24"/>
+
+    <item
+        android:id="@+id/bottom_account"
+        android:title="Account"
+        android:icon="@drawable/baseline_account_box_24"/>
+
+    <item
+        android:title=""
+        android:enabled="true"/>
+
+    <item
+        android:id="@+id/bottom_car"
+        android:title="Car"
+        android:icon="@drawable/baseline_directions_car_24"/>
+
+    <item
+        android:layout_width="164dp"
+        android:layout_height="164dp"
+        android:id="@+id/bottom_list_travel"
+        android:title="List travel"
+        android:icon="@drawable/baseline_list_24"/>
+
+
+</menu>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">TrajetHydiac</string>
+    <string name="trajet" translatable="true">Distance parcourue:</string>
+</resources>
