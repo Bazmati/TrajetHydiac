@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.trajethydiac3.bll.locationService.LocationServiceManager;
 import com.example.trajethydiac3.bo.Trajet;
 import com.example.trajethydiac3.dal.util.DatabaseHelper;
 import java.time.LocalDateTime;
@@ -41,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LocationServiceManager locationServiceManager = new LocationServiceManager(this);
 
         permissions.add(ACCESS_FINE_LOCATION);
         permissions.add(ACCESS_COARSE_LOCATION);
@@ -71,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startTime = LocalDateTime.now();
                     }
+
+
+
+                    locationServiceManager.requestLocationPermissions();
+
                     locationTrack = new LocationTrack(MainActivity.this);
                     isRecording = true;
                     btnStart.setVisibility(View.GONE);
