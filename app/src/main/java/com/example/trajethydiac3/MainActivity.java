@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,16 +39,18 @@ public class MainActivity extends AppCompatActivity {
 
     private Trajet trajet;
 
+    private LocationServiceManager locationServiceManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        LocationServiceManager locationServiceManager = new LocationServiceManager(this);
+        locationServiceManager = new LocationServiceManager(this);
 
-        permissions.add(ACCESS_FINE_LOCATION);
-        permissions.add(ACCESS_COARSE_LOCATION);
+        /**permissions.add(ACCESS_FINE_LOCATION);
+        permissions.add(ACCESS_COARSE_LOCATION);*/
 
         permissions.add(READ_EXTERNAL_STORAGE);
         permissions.add(WRITE_EXTERNAL_STORAGE);
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startLocationService();
                 if (!isRecording) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         startTime = LocalDateTime.now();
@@ -91,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                stopLocationService();
 
                 if (isRecording) {
                     View overlayView = findViewById(R.id.overlayView);
@@ -155,6 +161,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    // Demande d'autorisations de localisation
+    private void requestLocationPermissions() {
+        locationServiceManager.requestLocationPermissions();
+    }
+
+    // Démarrage des mises à jour de localisation
+    private void startLocationUpdates() {
+        locationServiceManager.startLocationUpdates();
+    }
+
+    // Arrêt des mises à jour de localisation
+    private void stopLocationUpdates() {
+        locationServiceManager.stopLocationUpdates();
     }
 
     private ArrayList<String> findUnAskedPermissions(ArrayList<String> wanted) {
@@ -235,6 +256,18 @@ public class MainActivity extends AppCompatActivity {
         super.onConfigurationChanged(newConfig);
 
 
+    }
+
+    private void startLocationService() {
+        // Créer un Intent pour démarrer le service
+        Intent serviceIntent = new Intent(this, LocationForegroundService.class);
+        startService(serviceIntent);
+    }
+
+    private void stopLocationService() {
+        // Créer un Intent pour arrêter le service
+        Intent serviceIntent = new Intent(this, LocationForegroundService.class);
+        stopService(serviceIntent);
     }
 
 

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.widget.Toast;
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -15,6 +16,12 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
 
@@ -42,9 +49,37 @@ public class LocationTrack implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
     protected LocationManager locationManager;
 
+    private FusedLocationProviderClient fusedLocationClient;
+    private LocationCallback locationCallback;
+
     public LocationTrack(Context mContext) {
         this.mContext = mContext;
         getLocation();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult != null) {
+                    for (Location location : locationResult.getLocations()) {
+                        // Gérez la nouvelle mise à jour de localisation ici.
+                    }
+                }
+            }
+        };
+    }
+
+    public void startLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000); // Intervalle de mise à jour en millisecondes
+        locationRequest.setFastestInterval(5000); // Intervalle le plus rapide en millisecondes
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY); // Précision élevée
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+    }
+
+    public void stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback);
     }
 
     private void getLocation() {
